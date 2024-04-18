@@ -7,6 +7,7 @@ export const getDetail = selector({
       const res = await axios.get("http://localhost:3000/isloggedin", {
         withCredentials: true,
       });
+      console.log(res.data);
       if (res.data.isloggedin == "true") {
         return res.data;
       }

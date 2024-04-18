@@ -10,10 +10,15 @@ import {
 import React from "react";
 import { change } from "@/store/atom/user";
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValueLoadable } from "recoil";
 const Navbar = () => {
-  const value = useRecoilValue(change);
-
+  const value = useRecoilValueLoadable(change);
+  if (value.state == "hasError") {
+    return <div>Error loading data</div>;
+  }
+  if (value.state == "loading") {
+    return <div>loading...</div>;
+  }
   return (
     <div>
       <div className="flex justify-between border border-gray-200 px-3 py-2 items-center rounded-xl">
@@ -23,7 +28,9 @@ const Navbar = () => {
           </h1>
         </div>
         <div className="flex justify-end items-center gap-3">
-          <Link to="/property">New Properties</Link>
+          {value.contents.isloggedin && (
+            <Link to="/property">New Properties</Link>
+          )}
         </div>
       </div>
       <Menubar className="mt-2">
@@ -31,7 +38,7 @@ const Navbar = () => {
           <React.Suspense
             fallback={<div className="text-center">Loading...</div>}
           >
-            {!value.isloggedin ? (
+            {!value.contents.isloggedin ? (
               <div className="flex justify-end w-full items-center gap-3">
                 <Link to="/signin">Signin</Link>
                 <Link to="/signup">Signup</Link>
@@ -53,9 +60,9 @@ const Navbar = () => {
           </React.Suspense>
           <MenubarContent>
             <MenubarItem>
-              {value?.name} <MenubarShortcut>❤️</MenubarShortcut>
+              {value.contents?.name} <MenubarShortcut>❤️</MenubarShortcut>
             </MenubarItem>
-            <MenubarItem>{value?.email}</MenubarItem>
+            <MenubarItem>{value.contents?.email}</MenubarItem>
             <MenubarSeparator />
           </MenubarContent>
         </MenubarMenu>

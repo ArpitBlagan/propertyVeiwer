@@ -4,11 +4,13 @@ import { useRecoilRefresher_UNSTABLE } from "recoil";
 import { getFav } from "@/store/atom/favv";
 import { Button } from "./ui/button";
 import toast from "react-hot-toast";
+import { getDetail } from "@/store/atom/user";
 import { useState } from "react";
 import axios from "axios";
 const Favc = () => {
   const ff = useRecoilValueLoadable(fav);
   const refresh = useRecoilRefresher_UNSTABLE(getFav);
+  const reff = useRecoilRefresher_UNSTABLE(getDetail);
   const [loading, setL] = useState(false);
   if (ff.state === "loading") {
     return <div>loading...</div>;
@@ -27,6 +29,7 @@ const Favc = () => {
       console.log(ff.data);
       setL(false);
       refresh();
+      reff();
       toast.success("remoed successfully");
     } catch (err) {
       console.log(err);

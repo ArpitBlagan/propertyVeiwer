@@ -1,8 +1,10 @@
 import { properties } from "@/store/atom/property";
 import { useRecoilValueLoadable } from "recoil";
 import { useRecoilRefresher_UNSTABLE } from "recoil";
+import { change } from "@/store/atom/user";
 import { getFav } from "@/store/atom/favv";
 import React, { useState } from "react";
+import { getDetail } from "@/store/atom/user";
 import { Button } from "./ui/button";
 import Dialog from "./Dialog";
 import toast from "react-hot-toast";
@@ -10,14 +12,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const Property = () => {
   const navigate = useNavigate();
+  const value = useRecoilValueLoadable(change);
   const refresh = useRecoilRefresher_UNSTABLE(getFav);
   const propertiesLoadable = useRecoilValueLoadable(properties);
+  const fff = useRecoilRefresher_UNSTABLE(getDetail);
   const [loading, setL] = useState(false);
-  if (propertiesLoadable.state === "loading") {
+  if (propertiesLoadable.state === "loading" || value.state == "loading") {
     return <div className="text-center">Loading...</div>;
   }
 
-  if (propertiesLoadable.state === "hasError") {
+  if (propertiesLoadable.state === "hasError" || value.state === "hasError") {
     return <div className="text-center">Error loading data</div>;
   }
   const handleAdd = async (id: any) => {
@@ -33,6 +37,7 @@ const Property = () => {
       console.log(ff.data);
       setL(false);
       refresh();
+      fff();
       toast.success("added successfully");
       navigate("/fav");
     } catch (err) {
@@ -46,6 +51,10 @@ const Property = () => {
       <React.Suspense fallback={<div className="text-center">Loading...</div>}>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 ">
           {propertiesLoadable.contents.map((ele: any, index: number) => {
+            let ok = true;
+            if (value.contents.favourite.includes(ele._id)) {
+              ok = false;
+            }
             return (
               <div
                 key={index}
@@ -64,16 +73,18 @@ const Property = () => {
                   <p>Price: ${ele.price}</p>
                 </div>
                 <div className="flex justify-around">
-                  <Button
-                    variant={"destructive"}
-                    disabled={loading}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAdd(ele._id);
-                    }}
-                  >
-                    Add To Favourite
-                  </Button>
+                  {ok && (
+                    <Button
+                      variant={"destructive"}
+                      disabled={loading}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAdd(ele._id);
+                      }}
+                    >
+                      Add To Favourite
+                    </Button>
+                  )}
                   <Button variant={"destructive"}>
                     <Dialog id={ele._id} />
                   </Button>
