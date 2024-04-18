@@ -5,9 +5,12 @@ export const getSent = selector({
   key: "getSent",
   get: async () => {
     try {
-      const dd = await axios.get("http://localhost:3000/outcontact", {
-        withCredentials: true,
-      });
+      const dd = await axios.get(
+        "https://propertyveiwer.onrender.com/outcontact",
+        {
+          withCredentials: true,
+        }
+      );
       console.log(dd.data);
       return dd.data;
     } catch (err) {
@@ -20,9 +23,12 @@ export const getQ = selector({
   key: "q",
   get: async () => {
     try {
-      const dd = await axios.get("http://localhost:3000/incontact", {
-        withCredentials: true,
-      });
+      const dd = await axios.get(
+        "https://propertyveiwer.onrender.com/incontact",
+        {
+          withCredentials: true,
+        }
+      );
       console.log(dd.data);
       return dd.data;
     } catch (err) {

@@ -52,6 +52,7 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     id: user._id,
                     email: user.email,
                     name: user.name,
+                    favourite: user.favourite,
                 },
             }, process.env.KEY);
             //send it to user through cookies
@@ -79,9 +80,24 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.signin = signin;
 const check = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res
-        .status(200)
-        .json({ isloggedin: "true", name: req.user.name, email: req.user.email });
+    try {
+        const id = req.user.id;
+        const user = yield user_1.default.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: "user not found" });
+        }
+        console.log(user.favourite);
+        return res.status(200).json({
+            isloggedin: "true",
+            name: req.user.name,
+            email: req.user.email,
+            favourite: user.favourite,
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "something went wrong!" });
+    }
 });
 exports.check = check;
 const getFav = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

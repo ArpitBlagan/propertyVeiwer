@@ -23,9 +23,12 @@ const Favc = () => {
     setL(true);
     console.log(id);
     try {
-      const ff = await axios.delete(`http://localhost:3000/fav${id}`, {
-        withCredentials: true,
-      });
+      const ff = await axios.delete(
+        `https://propertyveiwer.onrender.com/fav${id}`,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(ff.data);
       setL(false);
       refresh();

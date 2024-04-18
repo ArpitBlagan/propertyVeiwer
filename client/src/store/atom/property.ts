@@ -3,9 +3,12 @@ import axios from "axios";
 export const getProperty = selector({
   key: "getProperty",
   get: async () => {
-    const res = await axios.get("http://localhost:3000/property", {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      "https://propertyveiwer.onrender.com/property",
+      {
+        withCredentials: true,
+      }
+    );
     console.log(res.data);
     return res.data;
   },

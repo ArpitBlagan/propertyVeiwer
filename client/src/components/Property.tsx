@@ -30,7 +30,7 @@ const Property = () => {
     console.log(id);
     try {
       const ff = await axios.post(
-        "http://localhost:3000/fav/add",
+        "https://propertyveiwer.onrender.com/fav/add",
         { propertyId: id },
         { withCredentials: true }
       );
@@ -52,6 +52,7 @@ const Property = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 ">
           {propertiesLoadable.contents.map((ele: any, index: number) => {
             let ok = true;
+            console.log(value.contents);
             if (value.contents.favourite.includes(ele._id)) {
               ok = false;
             }

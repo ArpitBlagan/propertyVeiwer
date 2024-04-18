@@ -30,12 +30,17 @@ const Signin = () => {
         email: data.email,
         password: data.password,
       };
-      const res = await axios.post("http://localhost:3000/signin", body, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        "https://propertyveiwer.onrender.com/signin",
+        body,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(res.data);
 
       toast.success("user signin successfullly!");
+      console.log(res.data);
       setC(res.data);
       navigate("/");
     } catch (err) {

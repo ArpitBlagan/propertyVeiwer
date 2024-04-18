@@ -4,7 +4,7 @@ export const getFav = selector({
   key: "getfav",
   get: async () => {
     try {
-      const dd = await axios.get("http://localhost:3000/fav", {
+      const dd = await axios.get("https://propertyveiwer.onrender.com/fav", {
         withCredentials: true,
       });
       console.log(dd.data);

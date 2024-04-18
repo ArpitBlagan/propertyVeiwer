@@ -37,6 +37,7 @@ export const signin = async (req: Request, res: Response) => {
             id: user._id,
             email: user.email,
             name: user.name,
+            favourite: user.favourite,
           },
         },
         process.env.KEY as string
@@ -53,6 +54,7 @@ export const signin = async (req: Request, res: Response) => {
         message: "successfully logedIn",
         name: user.name,
         email: user.email,
+        favourite: user.favourite,
       });
     } else {
       return res.status(401).json({ message: "invalide credentials" });
@@ -63,9 +65,23 @@ export const signin = async (req: Request, res: Response) => {
   }
 };
 export const check = async (req: Request, res: Response) => {
-  return res
-    .status(200)
-    .json({ isloggedin: "true", name: req.user.name, email: req.user.email });
+  try {
+    const id = req.user.id;
+    const user = await uDB.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+    console.log(user.favourite);
+    return res.status(200).json({
+      isloggedin: "true",
+      name: req.user.name,
+      email: req.user.email,
+      favourite: user.favourite,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "something went wrong!" });
+  }
 };
 
 export const getFav = async (req: Request, res: Response) => {

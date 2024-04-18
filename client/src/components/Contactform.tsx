@@ -29,9 +29,13 @@ const Contactform = ({ property, setD }: any) => {
         phonenumber: data.phonenumber,
         propertyId: property,
       };
-      const res = await axios.post("http://localhost:3000/contact", body, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        "https://propertyveiwer.onrender.com/contact",
+        body,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(res.data);
       toast.success("message sent!");
       refresh();
