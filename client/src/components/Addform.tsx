@@ -33,9 +33,13 @@ export const Addform = () => {
       formdata.append("file", data.file[0]);
       formdata.append("description", data.description);
       formdata.append("price", data.price.toString());
-      const res = await axios.post("http://localhost:3000/property", formdata, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        "https://propertyveiwer.onrender.com/property",
+        formdata,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(res.data);
       toast.success("user signin successfullly!");
       refresh();
